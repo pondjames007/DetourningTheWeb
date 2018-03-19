@@ -24,7 +24,7 @@ subtitle = [line.split("\t")[-1] for line in open('cut_subtitle_mod.txt', 'r')]
 print(subtitle)
 
 # put images and subtitles together
-blank_image = Image.new('RGB', (1280*3+80, 2880), (0, 0, 0))
+blank_image = Image.new('RGB', (1280, 2880), (0, 0, 0))
 
 # load image files (images are selected manually)
 jpegs = sorted(glob.glob('kids/*.jpg'))
@@ -32,6 +32,7 @@ jpegs = sorted(glob.glob('kids/*.jpg'))
 x = 0
 y = 0
 i = 0
+c = 1
 
 for jpg in jpegs:
     im = Image.open(jpg)
@@ -48,6 +49,10 @@ for jpg in jpegs:
     y += height
     if y >= 2880:
         y = 0
-        x += width+40
+        # x += width+40
+        name = 'yonkoma%d.jpg' % (c)
+        print(name)
+        blank_image.save(name)
+        c += 1
 
-blank_image.save('yonkoma.jpg')
+
