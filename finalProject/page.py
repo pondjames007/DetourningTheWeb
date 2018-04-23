@@ -50,20 +50,29 @@ def language():
         raw_img_path = grabMovieInfo.getImage(movieid)
         print(raw_img_path)
         posters = ""
-                
-        for i, title in enumerate(language_results["titles"]):
+        flag = True
+        count = 0
+        for title in language_results["titles"]:
             # title = random.choice(language_results["titles"])
             if title["iso_3166_1"] != "US" and title["iso_3166_1"]!="GB" and title["iso_3166_1"]!="AU" and title["iso_3166_1"]!="CA":       
+                if count > 5:
+                    flag = False
+
                 if title["iso_3166_1"] == "TW":
                     country = "Taiwan"
+                    flag = True
                 else:
                     country = countries.get(title["iso_3166_1"]).name
-                translated_title = grabMovieInfo.translateString(title["title"])
-                print(country)
-                print(translated_title)
-                grabMovieInfo.edit_image(raw_img_path, translated_title, i)
-                url = Markup('<h3>' + country + '</h3>' + '<img src="/static/mod_' + str(i) + '_posterRaw.jpg" width="900">')
-                posters += url
+                
+                if flag == True:
+                    translated_title = grabMovieInfo.translateString(title["title"])
+                    print(country)
+                    print(translated_title)
+                    grabMovieInfo.edit_image(raw_img_path, translated_title, count)
+                    url = Markup('<h3>' + country + '</h3>' + '<img src="/static/mod_' + str(count) + '_posterRaw.jpg" width="900">')
+                    posters += url
+                    count += 1
+                    
         
 
         return render_template("result.html", posters=posters, keyword=keyword)
